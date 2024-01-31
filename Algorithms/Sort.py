@@ -17,6 +17,34 @@ class Sort:
                 j -= 1
         return lst
 
+    @staticmethod
+    def choice_sort(lst, inplace=False):
+        """Complexity: O(n^2)"""
+        if inplace is False:
+            lst = lst.copy()
+
+        for i in range(len(lst)):
+            j_min = i
+            for j in range(i, len(lst)):
+                if lst[j] < lst[j_min]:
+                    j_min = j
+            lst[i], lst[j_min] = lst[j_min], lst[i]
+        return lst
+
+    @staticmethod
+    def insertion_sort(lst, inplace=False):
+        """Complexity: O(n^2)"""
+        if not inplace:
+            lst = lst.copy()
+
+        for i in range(len(lst)):
+            ind_sorted_part = i - 1
+            while ind_sorted_part >= 0 and lst[ind_sorted_part + 1] < lst[ind_sorted_part]:
+                lst[ind_sorted_part + 1], lst[ind_sorted_part] = lst[ind_sorted_part], lst[ind_sorted_part + 1]
+                ind_sorted_part -= 1
+
+        return lst
+
     @classmethod
     def merge_sort(cls, lst, inplace=False):
         """Merge sort (сортировка слиянием), complexity: O(n*log_n)"""
@@ -49,7 +77,7 @@ class Sort:
 
     @classmethod
     def lomuto_sort(cls, lst, inplace=True):
-        """Memory-inplace, E(T(n)) = O(n*log_n), but in worst case (sorted array) it will be O(n^2)"""
+        """Memory-inplace, E(T(n)) = O(n*log_n)"""
         cls.lst = lst.copy() if not inplace else lst
         cls.__sort(0, len(lst)-1)
         lst = cls.lst
@@ -92,16 +120,22 @@ class Sort:
             return cls.lazy_quick_sort(left) + eq + cls.lazy_quick_sort(right)
         return lst
 
+    @classmethod
+    def quick_sort(cls):
+        """Memory-inplace, E(T(n)) = O(n*log_n)"""
+
 
 if __name__ == '__main__':
     iterations_count = 100
-    array_count = 10000
+    array_count = 1000
 
     for i in range(1, iterations_count+1):
         if i % 10 == 0:
-            print(f"Iteration #{i}")
+            print(f"Iteration {i}/{iterations_count}")
         lst = [randint(-10*array_count, 10*array_count) for _ in range(array_count)]
-        assert sorted(lst) == Sort.lomuto_sort(lst, inplace=False)
-        assert sorted(lst) == Sort.merge_sort(lst, inplace=False)
+        assert sorted(lst) == Sort.lomuto_sort(lst)
+        assert sorted(lst) == Sort.merge_sort(lst)
+        assert sorted(lst) == Sort.choice_sort(lst)
+        assert sorted(lst) == Sort.insertion_sort(lst)
 
     print("\nTests passed!")
