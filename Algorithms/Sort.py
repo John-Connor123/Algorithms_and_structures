@@ -76,27 +76,28 @@ class Sort:
         return res
 
     @classmethod
-    def lomuto_sort(cls, lst, inplace=True):
-        """Memory-inplace, E(T(n)) = O(n*log_n)"""
+    def lomuto_sort(cls, lst, inplace=False):
+        """It's modification of quick sort. Memory-inplace, E(T(n)) = O(n*log_n)"""
         cls.lst = lst.copy() if not inplace else lst
-        cls.__sort(0, len(lst)-1)
+        cls.__lomuto_sort(0, len(lst)-1)
         lst = cls.lst
         cls.lst = None
-        return lst
+        if not inplace:
+            return lst
 
     @classmethod
-    def __sort(cls, l, r):
+    def __lomuto_sort(cls, l, r):
         """Service method for lomuto_sort"""
         if l >= r:
             return
 
-        m = cls.__split(l, r)
-        cls.__sort(l, m-1)
-        cls.__sort(m+1, r)
+        m = cls.__lomuto_split(l, r)
+        cls.__lomuto_sort(l, m-1)
+        cls.__lomuto_sort(m+1, r)
 
     @classmethod
-    def __split(cls, l, r):
-        """Service method for __sort"""
+    def __lomuto_split(cls, l, r):
+        """Service method for lomuto_sort"""
         ind = randint(l, r)
         cls.lst[l], cls.lst[ind] = cls.lst[ind], cls.lst[l]
 
@@ -121,8 +122,40 @@ class Sort:
         return lst
 
     @classmethod
-    def quick_sort(cls):
+    def quick_sort(cls, lst, inplace=False):
         """Memory-inplace, E(T(n)) = O(n*log_n)"""
+        cls.lst = lst.copy() if not inplace else lst
+        cls.__quick_sort(0, len(lst)-1)
+        lst = cls.lst
+        cls.lst = None
+        if not inplace:
+            return lst
+
+    @classmethod
+    def __quick_sort(cls, left, right):
+        """Service method for quick_sort"""
+        if left >= right:
+            return
+
+        m = cls.__quick_split(left, right)
+        cls.__quick_sort(left, m-1)
+        cls.__quick_sort(m, right)
+
+    @classmethod
+    def __quick_split(cls, left, right):
+        """Service method for quick_sort"""
+        pivot = cls.lst[(left + right)//2]
+        while left <= right:
+            while cls.lst[left] < pivot:
+                left += 1
+            while cls.lst[right] > pivot:
+                right -= 1
+
+            if left <= right:
+                cls.lst[left], cls.lst[right] = cls.lst[right], cls.lst[left]
+                left += 1
+                right -= 1
+        return left
 
 
 if __name__ == '__main__':
@@ -132,10 +165,14 @@ if __name__ == '__main__':
     for i in range(1, iterations_count+1):
         if i % 10 == 0:
             print(f"Iteration {i}/{iterations_count}")
-        lst = [randint(-10*array_count, 10*array_count) for _ in range(array_count)]
-        assert sorted(lst) == Sort.lomuto_sort(lst)
-        assert sorted(lst) == Sort.merge_sort(lst)
+        lst = [randint(-2*array_count, 2*array_count) for _ in range(array_count)]
+        assert sorted(lst) == Sort.bubble_sort(lst)
         assert sorted(lst) == Sort.choice_sort(lst)
         assert sorted(lst) == Sort.insertion_sort(lst)
+
+        assert sorted(lst) == Sort.merge_sort(lst)
+        assert sorted(lst) == Sort.lomuto_sort(lst)
+        assert sorted(lst) == Sort.lazy_quick_sort(lst)
+        assert sorted(lst) == Sort.quick_sort(lst)
 
     print("\nTests passed!")
