@@ -2,7 +2,7 @@ from random import randint
 
 
 class Sort:
-    lst = None
+    __lst = None
 
     @staticmethod
     def bubble_sort(lst, inplace=False):
@@ -78,10 +78,10 @@ class Sort:
     @classmethod
     def lomuto_sort(cls, lst, inplace=False):
         """It's modification of quick sort. Memory-inplace, E(T(n)) = O(n*log_n)"""
-        cls.lst = lst.copy() if not inplace else lst
+        cls.__lst = lst.copy() if not inplace else lst
         cls.__lomuto_sort(0, len(lst)-1)
-        lst = cls.lst
-        cls.lst = None
+        lst = cls.__lst
+        cls.__lst = None
         if not inplace:
             return lst
 
@@ -99,15 +99,15 @@ class Sort:
     def __lomuto_split(cls, l, r):
         """Service method for lomuto_sort"""
         ind = randint(l, r)
-        cls.lst[l], cls.lst[ind] = cls.lst[ind], cls.lst[l]
+        cls.__lst[l], cls.__lst[ind] = cls.__lst[ind], cls.__lst[l]
 
         m = l
         for i in range(l+1, r+1):
-            if cls.lst[i] < cls.lst[l]:
+            if cls.__lst[i] < cls.__lst[l]:
                 m += 1
-                cls.lst[i], cls.lst[m] = cls.lst[m], cls.lst[i]
+                cls.__lst[i], cls.__lst[m] = cls.__lst[m], cls.__lst[i]
 
-        cls.lst[l], cls.lst[m] = cls.lst[m], cls.lst[l]
+        cls.__lst[l], cls.__lst[m] = cls.__lst[m], cls.__lst[l]
         return m
 
     @classmethod
@@ -124,10 +124,10 @@ class Sort:
     @classmethod
     def quick_sort(cls, lst, inplace=False):
         """Memory-inplace, E(T(n)) = O(n*log_n)"""
-        cls.lst = lst.copy() if not inplace else lst
+        cls.__lst = lst.copy() if not inplace else lst
         cls.__quick_sort(0, len(lst)-1)
-        lst = cls.lst
-        cls.lst = None
+        lst = cls.__lst
+        cls.__lst = None
         if not inplace:
             return lst
 
@@ -144,15 +144,15 @@ class Sort:
     @classmethod
     def __quick_split(cls, left, right):
         """Service method for quick_sort"""
-        pivot = cls.lst[(left + right)//2]
+        pivot = cls.__lst[(left + right)//2]
         while left <= right:
-            while cls.lst[left] < pivot:
+            while cls.__lst[left] < pivot:
                 left += 1
-            while cls.lst[right] > pivot:
+            while cls.__lst[right] > pivot:
                 right -= 1
 
             if left <= right:
-                cls.lst[left], cls.lst[right] = cls.lst[right], cls.lst[left]
+                cls.__lst[left], cls.__lst[right] = cls.__lst[right], cls.__lst[left]
                 left += 1
                 right -= 1
         return left
