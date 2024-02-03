@@ -144,7 +144,7 @@ class Sort:
     @classmethod
     def __quick_split(cls, left, right):
         """Service method for quick_sort"""
-        pivot = cls.__lst[(left + right)//2]
+        pivot = cls.__lst[randint(left, right)]
         while left <= right:
             while cls.__lst[left] < pivot:
                 left += 1
@@ -166,9 +166,12 @@ if __name__ == '__main__':
         if i % 10 == 0:
             print(f"Iteration {i}/{iterations_count}")
         lst = [randint(-2*array_count, 2*array_count) for _ in range(array_count)]
-        assert sorted(lst) == Sort.bubble_sort(lst)
-        assert sorted(lst) == Sort.choice_sort(lst)
-        assert sorted(lst) == Sort.insertion_sort(lst)
+
+        test_slow_algorithms = True
+        if test_slow_algorithms:
+            assert sorted(lst) == Sort.bubble_sort(lst)
+            assert sorted(lst) == Sort.choice_sort(lst)
+            assert sorted(lst) == Sort.insertion_sort(lst)
 
         assert sorted(lst) == Sort.merge_sort(lst)
         assert sorted(lst) == Sort.lomuto_sort(lst)
