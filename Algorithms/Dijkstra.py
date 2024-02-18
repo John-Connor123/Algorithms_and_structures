@@ -1,5 +1,5 @@
 import math
-from random import randint
+from random import randint, uniform
 
 
 class Node:
@@ -42,10 +42,13 @@ def dijkstra(adjacency_matrix, start_vertex: int, end_vertex: int, full_info: bo
     path = [end_vertex]
     curr_vertex = end_vertex
     while curr_vertex != start_vertex:
+        if distances[curr_vertex].prev is None:
+            path = []
+            break
         path.append(distances[curr_vertex].prev)
         curr_vertex = distances[curr_vertex].prev
 
-    return list(distances.values()), path[::-1] if full_info else path[::-1]
+    return [x.distance for x in distances.values()], path[::-1] if full_info else path[::-1]
 
 
 def print_matrix(matrix):
@@ -102,7 +105,7 @@ def test(matrix, start_vertex, end_vertex):
     while end != start:
         end = M[P[-1]]
         P.append(end)
-    return T, P[::-1]
+    return T, P[::-1] if T[end_vertex] != float('inf') else []
 
 
 if __name__ == '__main__':
@@ -110,19 +113,21 @@ if __name__ == '__main__':
     iterations_count = 100
     dimension = 50
     max_distance = 100
+    edge_probability = 0.45
 
     for i in range(1, iterations_count+1):
         if i % 10 == 0:
             print(f"Iteration {i}/{iterations_count}")
 
         # generate matrix
-        matrix = [[randint(1, max_distance) for _ in range(dimension)] for _ in range(dimension)]
+        matrix = [[randint(1, max_distance) if edge_probability > uniform(0, 1) else 0
+                   for _ in range(dimension)] for _ in range(dimension)]
         for i in range(dimension):
             for j in range(i, dimension):
                 if i != j:
                     if matrix[i][j] == 0:
                         matrix[i][j] = float('inf')
-                    matrix[i][j] = matrix[j][i]
+                    matrix[j][i] = matrix[i][j]
                 else:
                     matrix[i][i] = 0
 
