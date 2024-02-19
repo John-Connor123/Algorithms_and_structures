@@ -1,4 +1,3 @@
-import math
 from random import randint, uniform
 
 
@@ -61,25 +60,25 @@ def print_matrix(matrix):
     print()
 
 
-def arg_min(T, S):
-    """Service method for test function"""
-    amin = -1
-    m = math.inf  # максимальное значение
-    for i, t in enumerate(T):
-        if t < m and i not in S:
-            m = t
-            amin = i
-    return amin
-
-
 def test(matrix, start_vertex, end_vertex):
     """This is a test function from:
      1. https://www.youtube.com/watch?v=MCfjc_UIP1M&list=PLA0M1Bcd0w8yF0PO0eJ9v8VlsYEowmsnJ&index=3
      2. https://github.com/selfedu-rus/python-algorithms/blob/master/algorithm-dikstry.py
     :return: T, P, where T - array of distances for each vertex, P - array of vertex paths from start_vertex to end_vertex
     P.s. this function works only for start_vertex=0"""
+
+    def arg_min(T, S):
+        """Service method for test function"""
+        amin = -1
+        m = float('inf')  # максимальное значение
+        for i, t in enumerate(T):
+            if t < m and i not in S:
+                m = t
+                amin = i
+        return amin
+
     N = len(matrix)  # число вершин в графе
-    T = [math.inf] * N  # последняя строка таблицы
+    T = [float('inf')] * N  # последняя строка таблицы
 
     v = 0  # стартовая вершина (нумерация с нуля)
     S = {v}  # просмотренные вершины
@@ -127,7 +126,6 @@ if __name__ == '__main__':
                 if i != j:
                     if matrix[i][j] == 0:
                         matrix[i][j] = float('inf')
-                    matrix[j][i] = matrix[i][j]
                 else:
                     matrix[i][i] = 0
 
