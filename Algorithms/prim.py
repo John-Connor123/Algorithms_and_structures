@@ -13,7 +13,6 @@ def prim(adjacency_matrix):
             if adjacency_matrix[i][j] != -1:
                 edges.append((i, j, adjacency_matrix[i][j]))
     edges.sort(key=lambda x: x[2])
-
     
     minimum_egdes = set()
     visited_vertexes = {0}
@@ -30,15 +29,6 @@ def prim(adjacency_matrix):
 
     return minimum_egdes
              
-
-def has_cycle(adjacency_matrix, edge, visited, parent=-1):
-    visited[edge] = True
-    for j in range(len(adjacency_matrix)): # i + 1
-        if j not in (i, parent) and adjacency_matrix[edge][j] != -1:
-            if visited[j]:
-                raise 
-            has_cycle(adjacency_matrix, j, visited, edge)
-
 
 def test(adjacency_matrix):
     # Алгоритм Прима поиска минимального остова графа
@@ -57,7 +47,6 @@ def test(adjacency_matrix):
                 R.append((adjacency_matrix[i][j], i, j))
     R.sort(key=lambda x: x[0])
     R = [(math.inf, -1, -1)] + R
-
 
     N = len(adjacency_matrix)    # число вершин в графе
     U = {0}   # множество соединенных вершин
@@ -92,6 +81,15 @@ def get_random_matrix(dimension, max_distance, edge_probability, is_directed=Fal
                 matrix[j][i] = matrix[i][j]
             matrix[i][i] = 0
     return matrix
+
+
+def has_cycle(adjacency_matrix, edge, visited, parent=-1):
+    visited[edge] = True
+    for j in range(len(adjacency_matrix)): # i + 1
+        if j not in (i, parent) and adjacency_matrix[edge][j] != -1:
+            if visited[j]:
+                raise 
+            has_cycle(adjacency_matrix, j, visited, edge)
 
 
 if __name__ == '__main__':
@@ -131,6 +129,7 @@ if __name__ == '__main__':
             
             for i in range(dimension):
                 visited = dict.fromkeys(range(dimension), False)
-                has_cycle(span_tree, i, visited)
+                if has_cycle(span_tree, i, visited):
+                    raise AssertionError
             
     print("\nTests passed!")
