@@ -12,8 +12,8 @@ class Sort:
 
         for i in range(len(lst)):
             j = i
-            while j > 0 and lst[j] < lst[j-1]:
-                lst[j], lst[j-1] = lst[j-1], lst[j]
+            while j > 0 and lst[j] < lst[j - 1]:
+                lst[j], lst[j - 1] = lst[j - 1], lst[j]
                 j -= 1
         return lst
 
@@ -40,7 +40,10 @@ class Sort:
         for i in range(len(lst)):
             ind_sorted_part = i - 1
             while ind_sorted_part >= 0 and lst[ind_sorted_part + 1] < lst[ind_sorted_part]:
-                lst[ind_sorted_part + 1], lst[ind_sorted_part] = lst[ind_sorted_part], lst[ind_sorted_part + 1]
+                lst[ind_sorted_part + 1], lst[ind_sorted_part] = (
+                    lst[ind_sorted_part],
+                    lst[ind_sorted_part + 1],
+                )
                 ind_sorted_part -= 1
 
         return lst
@@ -57,12 +60,12 @@ class Sort:
         if n <= 1:
             return lst
 
-        return cls.__merge(cls.__merge_sort(lst[:n//2]), cls.__merge_sort(lst[n//2:]))
+        return cls.__merge(cls.__merge_sort(lst[: n // 2]), cls.__merge_sort(lst[n // 2 :]))
 
     @classmethod
     def __merge(cls, lst1, lst2):
         """Service method for __merge_sort"""
-        max1, max2 = len(lst1)-1, len(lst2)-1
+        max1, max2 = len(lst1) - 1, len(lst2) - 1
         i, j = 0, 0
         res = []
         while i <= max1 and j <= max2:
@@ -72,49 +75,49 @@ class Sort:
             else:
                 res.append(lst2[j])
                 j += 1
-        res += lst1[i:max1+1] if i <= max1 else lst2[j:max2+1]
+        res += lst1[i : max1 + 1] if i <= max1 else lst2[j : max2 + 1]
         return res
 
     @classmethod
     def lomuto_sort(cls, lst, inplace=False):
         """It's modification of quick sort. Memory-inplace, E(T(n)) = O(n*log_n)"""
         cls.__lst = lst.copy() if not inplace else lst
-        cls.__lomuto_sort(0, len(lst)-1)
+        cls.__lomuto_sort(0, len(lst) - 1)
         lst = cls.__lst
         cls.__lst = None
         if not inplace:
             return lst
 
     @classmethod
-    def __lomuto_sort(cls, l, r):
+    def __lomuto_sort(cls, left, right):
         """Service method for lomuto_sort"""
-        if l >= r:
+        if left >= right:
             return
 
-        m = cls.__lomuto_split(l, r)
-        cls.__lomuto_sort(l, m-1)
-        cls.__lomuto_sort(m+1, r)
+        m = cls.__lomuto_split(left, right)
+        cls.__lomuto_sort(left, m - 1)
+        cls.__lomuto_sort(m + 1, right)
 
     @classmethod
-    def __lomuto_split(cls, l, r):
+    def __lomuto_split(cls, left, right):
         """Service method for lomuto_sort"""
-        ind = randint(l, r)
-        cls.__lst[l], cls.__lst[ind] = cls.__lst[ind], cls.__lst[l]
+        ind = randint(left, right)
+        cls.__lst[left], cls.__lst[ind] = cls.__lst[ind], cls.__lst[left]
 
-        m = l
-        for i in range(l+1, r+1):
-            if cls.__lst[i] < cls.__lst[l]:
+        m = left
+        for i in range(left + 1, right + 1):
+            if cls.__lst[i] < cls.__lst[left]:
                 m += 1
                 cls.__lst[i], cls.__lst[m] = cls.__lst[m], cls.__lst[i]
 
-        cls.__lst[l], cls.__lst[m] = cls.__lst[m], cls.__lst[l]
+        cls.__lst[left], cls.__lst[m] = cls.__lst[m], cls.__lst[left]
         return m
 
     @classmethod
     def lazy_quick_sort(cls, lst):
         """Complexity: O(n*log_n), but memory-complexity also O(n*log_n)"""
         if len(lst):
-            pivot = lst[randint(0, len(lst)-1)]
+            pivot = lst[randint(0, len(lst) - 1)]
             left = [x for x in lst if x < pivot]
             eq = [x for x in lst if x == pivot]
             right = [x for x in lst if x > pivot]
@@ -125,7 +128,7 @@ class Sort:
     def quick_sort(cls, lst, inplace=False):
         """Memory-inplace, E(T(n)) = O(n*log_n)"""
         cls.__lst = lst.copy() if not inplace else lst
-        cls.__quick_sort(0, len(lst)-1)
+        cls.__quick_sort(0, len(lst) - 1)
         lst = cls.__lst
         cls.__lst = None
         if not inplace:
@@ -138,7 +141,7 @@ class Sort:
             return
 
         m = cls.__quick_split(left, right)
-        cls.__quick_sort(left, m-1)
+        cls.__quick_sort(left, m - 1)
         cls.__quick_sort(m, right)
 
     @classmethod
@@ -158,14 +161,14 @@ class Sort:
         return left
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     iterations_count = 100
     array_count = 1000
 
-    for i in range(1, iterations_count+1):
+    for i in range(1, iterations_count + 1):
         if i % 10 == 0:
             print(f"Iteration {i}/{iterations_count}")
-        lst = [randint(-2*array_count, 2*array_count) for _ in range(array_count)]
+        lst = [randint(-2 * array_count, 2 * array_count) for _ in range(array_count)]
 
         test_slow_algorithms = True
         if test_slow_algorithms:

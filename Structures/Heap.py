@@ -12,7 +12,7 @@ class Heap:
         """O(n)"""
         obj = cls(lst, make_copy=not inplace)
         to_return = []
-        for i in range(len(lst)):
+        for _ in range(len(lst)):
             to_return.append(obj.remove_min())
         return to_return
 
@@ -28,16 +28,22 @@ class Heap:
 
     def remove_min(self):
         """O(log_n)"""
-        self.__lst[len(self) - 1], self.__lst[0] = self.__lst[0], self.__lst[len(self) - 1]
+        self.__lst[len(self) - 1], self.__lst[0] = (
+            self.__lst[0],
+            self.__lst[len(self) - 1],
+        )
         to_return = self.__lst.pop()
         self.__sift_down()  # O(log_n)
         return to_return
 
     def __sift_up(self, i):
         """Просеивание вверх"""
-        while i and self.__lst[i] < self.__lst[(i-1)//2]:
-            self.__lst[i], self.__lst[(i-1)//2] = self.__lst[(i-1)//2], self.__lst[i]
-            i = (i-1)//2
+        while i and self.__lst[i] < self.__lst[(i - 1) // 2]:
+            self.__lst[i], self.__lst[(i - 1) // 2] = (
+                self.__lst[(i - 1) // 2],
+                self.__lst[i],
+            )
+            i = (i - 1) // 2
 
     def __sift_down(self, i=0):
         """Просеивание вниз"""
@@ -47,7 +53,10 @@ class Heap:
                 index_min_child = 2 * i + 2
 
             if self.__lst[i] > self.__lst[index_min_child]:
-                self.__lst[i], self.__lst[index_min_child] = self.__lst[index_min_child], self.__lst[i]
+                self.__lst[i], self.__lst[index_min_child] = (
+                    self.__lst[index_min_child],
+                    self.__lst[i],
+                )
                 i = index_min_child
             else:
                 break
@@ -66,15 +75,16 @@ class Heap:
         return hash(tuple(self.__lst))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from random import randint
+
     n = 10000
 
-    lst = [randint(-2*n, 2*n) for i in range(n)]
+    lst = [randint(-2 * n, 2 * n) for i in range(n)]
     assert Heap.heap_sort(lst, inplace=False) == sorted(lst)
 
     heap = Heap()
-    for i in range(n):
+    for _ in range(n):
         heap.insert(lst)
     print(f"Inserted {n} elements. Size of heap:", len(heap))
 
@@ -90,4 +100,3 @@ if __name__ == '__main__':
     d[l1] = 1
     d[l2] = 2
     assert d == {l1: 2}
-

@@ -1,4 +1,4 @@
-from typing import Optional, Union, Generator
+from typing import Generator, Optional, Union
 
 
 class StackObj:
@@ -19,7 +19,7 @@ class Stack:
         if not self.top:
             self.top = obj
         else:
-            self.__get_stack_obj_by_index(self.__size-1).pnext = obj
+            self.__get_stack_obj_by_index(self.__size - 1).pnext = obj
 
         self.__size += 1
 
@@ -42,7 +42,7 @@ class Stack:
 
     def validate_index(self, ind: int) -> None:
         if not (0 <= ind < self.__size):
-            raise IndexError('неверный индекс')
+            raise IndexError("неверный индекс")
 
     def __get_stack_obj_by_index(self, ind: int) -> StackObj:
         self.validate_index(ind)

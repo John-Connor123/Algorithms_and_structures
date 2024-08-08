@@ -1,5 +1,6 @@
-from TimeDecorator import TimeDecorator
 from Sort import Sort
+
+from TimeDecorator import TimeDecorator
 
 
 class Divisors:
@@ -13,7 +14,7 @@ class Divisors:
             if n % i == 0:
                 lst.append(i)
                 if i**2 != n:
-                    lst.append(int(n/i))
+                    lst.append(int(n / i))
             i += 1
         return Sort.merge_sort(lst)
 
@@ -58,7 +59,7 @@ class Divisors:
         return lst
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     n = 10000000000
     # print(check_new_func(n, slow_all_divisors, fast_all_divisors))
     TimeDecorator.plot(n, Divisors.fast_all_divisors)

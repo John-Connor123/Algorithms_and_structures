@@ -1,7 +1,8 @@
-from time import time
-import numpy as np
-import matplotlib.pyplot as plt
 from functools import wraps
+from time import time
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 class TimeDecorator:
@@ -21,6 +22,7 @@ class TimeDecorator:
                 return np.linspace(1, n, parts_number).round(), times
 
             return wrapper
+
         return set_func
 
     @staticmethod
@@ -29,13 +31,14 @@ class TimeDecorator:
             @wraps(func)
             def wrapper(*args, **kwargs):
                 time_res = []
-                for i in range(number):
+                for _ in range(number):
                     start = time()
                     func(*args, **kwargs)
                     time_res.append(time() - start)
                 return sum(time_res) / len(time_res)
 
             return wrapper
+
         return set_func
 
     @staticmethod
