@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "algorithms-and-structures"
+version = "0.1.0"
+description = "This library contains Python implementations of popular algorithms and structures."
+authors = ["JohnConnor123 <ivan.eudokimoff2014@gmail.com>"]
+maintainers = ["JohnConnor123 <ivan.eudokimoff2014@gmail.com>"]
+repository = "https://github.com/JohnConnor123/algorithms-and-structures"
+# documentation = "" - in progress
+keywords = ["algorithms", "structures"]
+license = "Apache-2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.9"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.6.0"
+pytest = "^7.4.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 95
+target-version = ["py39"]
+
+[tool.isort]
+profile = "black"
+line_length = 90
+lines_after_imports = 2
+
+[tool.flake8]
+max-line-length = 95
+ignore = ['E501', 'E203', 'W503']
+max-complexity = 12
+select = ['B', 'C', 'E', 'F', 'W', 'B9']
+per-file-ignores = [
+    # file to define custom types
+    'types.py: F401',
+]
+count = true
+
+[tool.nbqa.config]
+black = "pyproject.toml"
+isort = "pyproject.toml"
+flake8 = "pyproject.toml"
+
+[tool.nbqa.addopts]
+flake8 = ["--extend-ignore=E402"]
+
+[tool.nbqa.mutate]
+black = 1
+isort = 1
